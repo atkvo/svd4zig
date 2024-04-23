@@ -106,7 +106,7 @@ pub fn main() anyerror!void {
     var cur_interrupt: svd.Interrupt = undefined;
     while (try stream.readUntilDelimiterOrEof(&line_buffer, '\n')) |line| {
         if (line.len == 0) {
-            break;
+            continue;
         }
         var chunk = getChunk(line) orelse continue;
         switch (state) {
