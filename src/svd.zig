@@ -86,7 +86,7 @@ pub const Device = struct {
         try out_stream.writeAll("pub const interrupts = struct {\n");
         var iter = self.interrupts.iterator();
         while (iter.next()) |entry| {
-            var interrupt = entry.value_ptr.*;
+            const interrupt = entry.value_ptr.*;
             if (interrupt.value) |int_value| {
                 try out_stream.print(
                     "pub const {s} = {};\n",
@@ -613,7 +613,7 @@ pub const Field = struct {
 };
 
 test "Field print" {
-    var allocator = std.testing.allocator;
+    const allocator = std.testing.allocator;
     const fieldDesiredPrint =
         \\
         \\/// RNGEN [2:2]
@@ -639,7 +639,7 @@ test "Field print" {
 }
 
 test "Register Print" {
-    var allocator = std.testing.allocator;
+    const allocator = std.testing.allocator;
     const registerDesiredPrint =
         \\
         \\/// RND
@@ -702,7 +702,7 @@ test "Register Print" {
 }
 
 test "Peripheral Print" {
-    var allocator = std.testing.allocator;
+    const allocator = std.testing.allocator;
     const peripheralDesiredPrint =
         \\
         \\/// PERIPH comment
@@ -779,7 +779,7 @@ test "Peripheral Print" {
 fn bitWidthToMask(width: u32) u32 {
     const max_supported_bits = 32;
     const width_to_mask = blk: {
-        comptime var mask_array: [max_supported_bits + 1]u32 = undefined;
+        const mask_array: [max_supported_bits + 1]u32 = undefined;
         inline for (mask_array, 0..) |*item, i| {
             const i_use = if (i == 0) max_supported_bits else i;
             // This is needed to support both Zig 0.7 and 0.8
