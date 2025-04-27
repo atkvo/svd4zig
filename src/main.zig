@@ -52,7 +52,7 @@ const register_def =
     \\            }
     \\            var old_value = self.read();
     \\            const info = @typeInfo(@TypeOf(new_value));
-    \\            inline for (info.Struct.fields) |field| {
+    \\            inline for (info.@"struct".fields) |field| {
     \\                @field(old_value, field.name) = @field(new_value, field.name);
     \\            }
     \\            self.write(old_value);
@@ -431,10 +431,10 @@ fn getChunk(line: []const u8) ?XmlChunk {
     };
 
     const trimmed = mem.trim(u8, line, " \n");
-    var toker = mem.tokenize(u8, trimmed, "<>"); //" =\n<>\"");
+    var toker = mem.tokenizeAny(u8, trimmed, "<>"); //" =\n<>\"");
 
     if (toker.next()) |maybe_tag| {
-        var tag_toker = mem.tokenize(u8, maybe_tag, " =\"");
+        var tag_toker = mem.tokenizeAny(u8, maybe_tag, " =\"");
         chunk.tag = tag_toker.next() orelse return null;
         if (tag_toker.next()) |maybe_tag_property| {
             if (ascii.eqlIgnoreCase(maybe_tag_property, "derivedFrom")) {
